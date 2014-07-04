@@ -1,6 +1,4 @@
-
 // LINHA 187...
-
 
 #include <stdio.h>
 #include <stdlib.h>
