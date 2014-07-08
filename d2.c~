@@ -2,10 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <curses.h>
-#include "conio.h"
-#define p(x) cprintf("%s",x);
-#define n(x) cprintf("%d",x);
-#define s(x) cscanf("%d",&x);
+#define p(x) printf("%s",x);
+#define n(x) printf("%d",x);
+#define s(x) scanf("%d",&x);
 int jogx1[]={0,0,0,0,1,1,1,1,2,2,2,2};
 int inix1[]={0,0,0,0,1,1,1,1,2,2,2,2};
 int jogy1[]={1,3,5,7,0,2,4,6,1,3,5,7};
@@ -17,7 +16,7 @@ int jogy2[]={0,2,4,6,1,3,5,7,0,2,4,6};
 int iniy2[]={0,2,4,6,1,3,5,7,0,2,4,6}; 
 int jogz2[]={0,0,0,0,0,0,0,0,0,0,0,0}; 
 int campo[8][8];
-void comeca(int *f1,int *f2);
+void comeca();
 void imprimir();
 void inicia(int f1,int f2);
 void joga(int jogx[],int jogy[],int x,int m,int vez);
@@ -29,12 +28,12 @@ int vence(int *f1,int *f2);
 int main(){
 int vez,x,v,i,j,m,pass,f1=0,f2=0;
 srand(time(NULL));
-initconio();
 jogar: 
-comeca(&f1,&f2);
+comeca();
 inicia(f1,f2);
 
 for(vez=0;vez < 20;vez++){
+
 if(vez%2==0){
 
 v: do{
@@ -61,23 +60,21 @@ x:
 x = rand()%12;
 if(jogx2[x] == -1)
 goto x;
-cprintf("jog %d ",x+13);
-
+printf("jog %d ",x+13);
 
 //do{
 m = (rand()%2)+1;
-cprintf("pos %d\n",m);
+printf("pos %d\n",m);
 //}while(m < 1 || m > 2);
 
 joga(jogx2,jogy2,x,m,vez);
 if (vere(jogx2,jogy2,x,m,vez) == 0 || come(jogx2,jogy2,jogx1,jogy1,m,x,vez) == 0)
 goto x;
 }
+inicia(f1,f2);
 v = vence(&f1,&f2);
 if(v > 0)
 break;
-
-inicia(f1,f2);
 }
 p("\n\nTIME ");
 n(v);
@@ -88,39 +85,25 @@ p("2 -- NAO\n")
 __fpurge(stdin);
 if(getchar() == '1')
 goto jogar;
-doneconio();
+
 return(0);
 }
 
 void imprimir(){
-int x,y;
-for(x = 0;x<8;x++){
-for(y=0;y<8;y++){
-if(x%2 == 0){   
-if(y%2 ==0)  
-textbackground(YELLOW);
-     else
-textbackground(MAGENTA);
-}else{
-if(y%2 ==0)  
-textbackground(MAGENTA);
-     else
-textbackground(YELLOW);
+int i,j;
+for(i=0;i<8;i++){
+   for(j=0;j<8;j++)
+      printf("%2d|",campo[i][j]);
+printf("\n");
 }
-cprintf("%2d|",campo[x][y]);
-}
-cprintf("\n");
-}
-textbackground(BLACK);
 }
 
 void inicia(int f1,int f2){
 int i,j,w = 1, u = 13;
 system("clear");
-clrscr();
 p("jogadores fora de campo :\n")
-cprintf(" TIME 1: %d\n",f1);
-cprintf(" TIME 2: %d\n",f2);
+printf(" TIME 1: %d\n",f1);
+printf(" TIME 2: %d\n",f2);
 
 for(i=0;i<8;i++){
    for(j=0;j<8;j++){
@@ -294,9 +277,9 @@ t2++;
 }
 *f1 = t1;
 *f2 = t2;
-if(*f1 == 3)
+if(*f1 == 1)
 t = 2;
-else if(*f2 == 3)
+else if(*f2 == 1)
 t = 1;
 else
 t = 0;
@@ -304,10 +287,8 @@ t = 0;
 return(t);
 }
 
-void comeca(int *f1,int *f2){
+void comeca(){
 int i;
-*f1 = 0;
-*f2 = 0;
 for(i=0;i<12;i++){
 jogx1[i] = inix1[i];
 jogx2[i] = inix2[i];
